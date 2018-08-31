@@ -35,41 +35,41 @@ describe('Given a set of files storing inconsistencies, this analyzer should', f
         setTimeout(done, 200);
     });
 
-    it('retrieve differences between clients comparing with their baselines', function (done) {
-        let baselineDataRepository = new BaselineDataFileRepository();
-        let currentDataRepository =  new CurrentDataFileRepository();
-        let differencesDataRepository = new DifferencesDataFileRepository();
-        let dataAnalyzer = new DataAnalyzer(baselineDataRepository, currentDataRepository, differencesDataRepository);
+    // it('retrieve differences between clients comparing with their baselines', function (done) {
+    //     let baselineDataRepository = new BaselineDataFileRepository();
+    //     let currentDataRepository =  new CurrentDataFileRepository();
+    //     let differencesDataRepository = new DifferencesDataFileRepository();
+    //     let dataAnalyzer = new DataAnalyzer(baselineDataRepository, currentDataRepository, differencesDataRepository);
 
-        baselineDataRepository.store('ebm', 'No have inconsistencies');
-        baselineDataRepository.store('pacaembu', 'No have inconsistencies');
-        baselineDataRepository.store('secol', 'No have inconsistencies');
+    //     baselineDataRepository.store('ebm', 'No have inconsistencies');
+    //     baselineDataRepository.store('pacaembu', 'No have inconsistencies');
+    //     baselineDataRepository.store('secol', 'No have inconsistencies');
 
-        currentDataRepository.store('ebm', '1 new inconsistency');
-        currentDataRepository.store('pacaembu', 'No have inconsistencies');
-        currentDataRepository.store('secol', '2 new inconsistencies');
+    //     currentDataRepository.store('ebm', '1 new inconsistency');
+    //     currentDataRepository.store('pacaembu', 'No have inconsistencies');
+    //     currentDataRepository.store('secol', '2 new inconsistencies');
 
-        dataAnalyzer.listClientsWithAddedInconsistencies((clientFilesWithNewInconsistencies) => {
-            assert.strictEqual(clientFilesWithNewInconsistencies[0], 'ebm');
-            assert.strictEqual(clientFilesWithNewInconsistencies[1],'secol');
-            assert.strictEqual(clientFilesWithNewInconsistencies.length,2);
-            done();
-        });
-    });
+    //     dataAnalyzer.listClientsWithAddedInconsistencies((clientFilesWithNewInconsistencies) => {
+    //         assert.strictEqual(clientFilesWithNewInconsistencies[0], 'ebm');
+    //         assert.strictEqual(clientFilesWithNewInconsistencies[1],'secol');
+    //         assert.strictEqual(clientFilesWithNewInconsistencies.length,2);
+    //         done();
+    //     });
+    // });
 
-    it('should retrieve as difference when client does not have their own counterpart on baseline', function(done) {
-        let baselineDataRepository = new BaselineDataFileRepository();
-        let currentDataRepository =  new CurrentDataFileRepository();
-        let differencesDataRepository = new DifferencesDataFileRepository();
-        let dataAnalyzer = new DataAnalyzer(baselineDataRepository, currentDataRepository, differencesDataRepository);;
+    // it('should retrieve as difference when client does not have their own counterpart on baseline', function(done) {
+    //     let baselineDataRepository = new BaselineDataFileRepository();
+    //     let currentDataRepository =  new CurrentDataFileRepository();
+    //     let differencesDataRepository = new DifferencesDataFileRepository();
+    //     let dataAnalyzer = new DataAnalyzer(baselineDataRepository, currentDataRepository, differencesDataRepository);;
 
-        baselineDataRepository.store('ebm', 'Dont have current data monitored');
-        currentDataRepository.store('pacaembu', 'Dont have baseline data saved');
+    //     baselineDataRepository.store('ebm', 'Dont have current data monitored');
+    //     currentDataRepository.store('pacaembu', 'Dont have baseline data saved');
 
-        dataAnalyzer.listClientsWithAddedInconsistencies((clientFilesWithNewInconsistencies) => {
-            assert.strictEqual(clientFilesWithNewInconsistencies[0],'pacaembu');
-            assert.strictEqual(clientFilesWithNewInconsistencies.length,1);
-            done();
-        });
-    })
+    //     dataAnalyzer.listClientsWithAddedInconsistencies((clientFilesWithNewInconsistencies) => {
+    //         assert.strictEqual(clientFilesWithNewInconsistencies[0],'pacaembu');
+    //         assert.strictEqual(clientFilesWithNewInconsistencies.length,1);
+    //         done();
+    //     });
+    // })
 });

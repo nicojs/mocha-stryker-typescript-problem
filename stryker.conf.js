@@ -10,7 +10,7 @@ module.exports = function(config) {
         transpilers: ["typescript"],
         reporters: ["clear-text", "progress", "html"],
         testFramework: "mocha",
-        coverageAnalysis: "off",
+        coverageAnalysis: "perTest",
         tsconfigFile: "tsconfig.json",
         thresholds: { high: 90, low: 70, break: 90 },
         mutate: [
@@ -19,10 +19,9 @@ module.exports = function(config) {
             "!src/inversify.config.ts",
         ],
         mochaOptions: {
-            files: [ 'test/**/*Test.ts' ],
+            files: [ 'build/test/**/*Test.js' ],
             ui: 'bdd',
-            timeout: 3000,
-            require: [ 'ts-node/register']
+            timeout: 3000
         }
     });
 };

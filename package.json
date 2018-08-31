@@ -4,8 +4,8 @@
   "description": "A service to remote monitor inconsistencies for beaver systems",
   "private": true,
   "scripts": {
-      "unit-test" : "mocha -t 5000 -r ts-node/register test/**/*Test.ts", // works
-      "mutation" : "stryker run" // not works
+    "unit-test": "mocha -t 5000 -r ts-node/register test/**/*Test.ts",
+    "mutation": "stryker run"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
@@ -44,12 +44,12 @@
     "rimraf": "^2.6.2",
     "rmdir-sync": "^1.0.1",
     "source-map-support": "^0.5.5",
-    "stryker": "^0.17.0",
-    "stryker-api": "^0.12.0",
-    "stryker-html-reporter": "^0.11.4",
-    "stryker-mocha-framework": "^0.7.2",
-    "stryker-mocha-runner": "^0.10.8",
-    "stryker-typescript": "^0.8.3",
+    "stryker": "^0.29.1",
+    "stryker-api": "^0.21.0",
+    "stryker-html-reporter": "^0.16.1",
+    "stryker-mocha-framework": "^0.12.1",
+    "stryker-mocha-runner": "^0.14.1",
+    "stryker-typescript": "^0.13.2",
     "ts-node": "^7.0.1",
     "typescript": "^3.0.3"
   }
