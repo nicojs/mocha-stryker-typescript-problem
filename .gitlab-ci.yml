@@ -1,14 +1,3 @@
-image: reg-img-unic.client.com/dev-beaver/node-pipeline-beaver:0.1.0
-
-variables:
-  DOCKER_FILE: run/Dockerfile
-  DOCKER_IMAGE_NAME: node-greenpiece-beaver
-  HARBOR_URL: reg-img-unic.client.com
-  HARBOR_ENVIRONMENT_DEV: dev-beaver
-  HARBOR_ENVIRONMENT_PROD: prod-beaver
-  HARBOR_REGISTRY_DEV: $HARBOR_URL/$HARBOR_ENVIRONMENT_DEV
-  HARBOR_REGISTRY_PROD: $HARBOR_URL/$HARBOR_ENVIRONMENT_PROD
-
 cache:
   key: ${CI_COMMIT_REF_SLUG}
   paths:
