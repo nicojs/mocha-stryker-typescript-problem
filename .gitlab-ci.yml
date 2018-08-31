@@ -1,0 +1,84 @@
+image: reg-img-unic.client.com/dev-beaver/node-pipeline-beaver:0.1.0
+
+variables:
+  DOCKER_FILE: run/Dockerfile
+  DOCKER_IMAGE_NAME: node-greenpiece-beaver
+  HARBOR_URL: reg-img-unic.client.com
+  HARBOR_ENVIRONMENT_DEV: dev-beaver
+  HARBOR_ENVIRONMENT_PROD: prod-beaver
+  HARBOR_REGISTRY_DEV: $HARBOR_URL/$HARBOR_ENVIRONMENT_DEV
+  HARBOR_REGISTRY_PROD: $HARBOR_URL/$HARBOR_ENVIRONMENT_PROD
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+  - node_modules/
+
+stages:
+  - build
+  - test
+  - publish
+
+build:
+  stage: build
+  script:
+    - npm install .
+    - ./node_modules/.bin/tsc
+    - echo $(node -p "require('./package.json').version") > version.txt
+  artifacts:
+    paths:
+      - node_modules/*
+      - build/*
+      - version.txt
+    expire_in: 1 day
+
+unit-test:
+  stage: test
+  script:
+    - npm install -g nyc
+    - npm test
+    - nyc report --reporter=html
+  artifacts:
+    paths:
+      - coverage/*
+    expire_in: 1 day
+
+mutation-test:
+  stage: test
+  dependencies:
+    - build
+  script:
+    - npm install -g stryker-cli
+    - stryker run
+  artifacts:
+    paths:
+      - reports/mutation/html/*
+    expire_in: 1 day
+
+harbor-dev:
+  image: docker:stable
+  stage: publish
+  dependencies:
+    - build
+  except:
+    - master
+  script:
+    - VERSION=$(cat version.txt)
+    - echo "$HARBOR_REGISTRY_PASS" | docker login --username=beaver --password-stdin $HARBOR_URL
+    - docker build . --file $DOCKER_FILE -t $HARBOR_REGISTRY_DEV/$DOCKER_IMAGE_NAME:$VERSION
+    - docker push $HARBOR_REGISTRY_DEV/$DOCKER_IMAGE_NAME:$VERSION
+
+harbor-prod:
+  image: docker:stable
+  stage: publish
+  dependencies:
+    - build
+  only:
+    - master
+  script:
+    - VERSION=$(cat version.txt)
+    - echo "$HARBOR_REGISTRY_PASS" | docker login --username=beaver --password-stdin $HARBOR_URL
+    - docker build . --file $DOCKER_FILE -t $HARBOR_REGISTRY_PROD/$DOCKER_IMAGE_NAME:$VERSION
+    - docker push $HARBOR_REGISTRY_PROD/$DOCKER_IMAGE_NAME:$VERSION
+
+
